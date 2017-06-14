@@ -4,6 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SmartWindow.iml" filepath="$PROJECT_DIR$/SmartWindow.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/slidingWindow.iml" filepath="$PROJECT_DIR$/slidingWindow.iml" />
     </modules>
   </component>
 </project>
