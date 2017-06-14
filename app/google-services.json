@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "2214781824",
+    "project_id": "firebase-smartwindow"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:2214781824:android:db46c04b6ec44957",
+        "android_client_info": {
+          "package_name": "sungshin.ac.kr.smartwindow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "2214781824-jglt519o6hk4etbb5cdmgl19ofafs0p4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClHVjqj_iXPm_HuOyDFbc6qcOa3dqErWI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
