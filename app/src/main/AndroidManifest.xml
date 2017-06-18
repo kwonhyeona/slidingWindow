@@ -2,12 +2,58 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sungshin.ac.kr.smartwindow">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 디바이스가 꺼진 상태에서도 알림이 오면 진동이나 이벤트를 처리할 수 있도록 등록 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- 메세지 받는 권한 등록 -->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+    <permission
+        android:name="sungshin.ac.kr.smartwindow.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="sungshin.ac.kr.smartwindow.permission.C2D_MESSAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver
+            android:name="com.amazonaws.mobileconnectors.pinpoint.targeting.notification.PinpointNotificationReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.amazonaws.intent.fcm.NOTIFICATION_OPEN" />
+            </intent-filter>
+        </receiver>
+        <!-- FCM을 받았을 때 동직하기 위한 리시버 -->
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.permission.RECEIVE" />
+
+                <category android:name="net.saltfactory.demo.gcm" />
+            </intent-filter>
+        </receiver>
+        <!-- FCM 요청을 대기하고 있는 리스너 서비스 -->
+        <service
+            android:name=".service.fcm.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <!-- Instance ID 요청을 대기하고 있는 리스너 서비스 -->
+        <service
+            android:name=".service.fcm.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -15,6 +61,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".SignInActivity" />
+        <activity android:name=".SplashActivity" />
+        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>

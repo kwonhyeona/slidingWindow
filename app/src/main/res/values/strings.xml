@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SmartWindow</string>
+    <string name="server_domain">192.168.0.8</string>
 </resources>
