@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 현재 위치 얻어오기 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!-- 디바이스가 꺼진 상태에서도 알림이 오면 진동이나 이벤트를 처리할 수 있도록 등록 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 메세지 받는 권한 등록 -->
@@ -21,6 +24,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:name="android.support.multidex.MultiDexApplication"
         android:theme="@style/AppTheme">
         <receiver
             android:name="com.amazonaws.mobileconnectors.pinpoint.targeting.notification.PinpointNotificationReceiver"
@@ -41,29 +45,31 @@
             </intent-filter>
         </receiver>
         <!-- FCM 요청을 대기하고 있는 리스너 서비스 -->
-        <service
-            android:name=".service.fcm.MyFirebaseMessagingService">
+        <service android:name=".service.fcm.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <!-- Instance ID 요청을 대기하고 있는 리스너 서비스 -->
-        <service
-            android:name=".service.fcm.MyFirebaseInstanceIDService">
+        <service android:name=".service.fcm.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
         <activity android:name=".MainActivity">
+
+        </activity>
+        <!--<activity android:name=".SignInActivity" />-->
+        <!--<activity android:name=".SplashActivity" />-->
+        <!--<activity android:name=".LoginActivity" />-->
+        <activity android:name=".weather.TestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".SplashActivity" />
-        <activity android:name=".LoginActivity"></activity>
     </application>
 
 </manifest>
