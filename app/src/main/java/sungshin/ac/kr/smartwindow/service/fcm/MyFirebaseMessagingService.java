@@ -10,8 +10,12 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.firebase.messaging.RemoteMessage;
 
+import java.util.Map;
+
 import sungshin.ac.kr.smartwindow.MainActivity;
 import sungshin.ac.kr.smartwindow.R;
+
+import static android.R.id.message;
 
 /**
  * Created by Sansung on 2017-06-19.
@@ -25,10 +29,15 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
         //추가한것
-        sendNotification(remoteMessage.getData().get("message"));
+        String from = remoteMessage.getFrom();
+        Map<String, String> data = remoteMessage.getData();
+        String title = data.get("title");
+        String msg = data.get("message");
+
+        sendNotification(title, msg);
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String messageTitle, String messageBody) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -38,7 +47,7 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
         //아이콘이나 제목 수정 -> 알림의 모양을 설정하는 코드
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("FCM Push Test")
+                .setContentTitle(messageTitle)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
