@@ -17,7 +17,7 @@ import sungshin.ac.kr.smartwindow.weather.TestActivity;
 
 public class AlarmUtils {
     //private final static int ONE_MINUES = 60 * 1000;
-    private final static int ONE_MINUES = 60 * 1000;
+    private final static int ONE_MINUES = 600000 * 1000;
     private static AlarmUtils _instance;
 
     public static AlarmUtils getInstance() {

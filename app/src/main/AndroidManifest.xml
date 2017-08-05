@@ -19,8 +19,12 @@
 
     <uses-permission android:name="sungshin.ac.kr.smartwindow.permission.C2D_MESSAGE" />
 
+    <!--android:name="android.support.multidex.MultiDexApplication"-->
+    <!--android:name=".application.ApplicationController"-->
+
     <application
-        android:name="android.support.multidex.MultiDexApplication"
+
+        android:name=".application.ApplicationController"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -57,16 +61,18 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".MainActivity"></activity>
-        <!-- <activity android:name=".SignInActivity" /> -->
-        <!-- <activity android:name=".SplashActivity" /> -->
-        <!-- <activity android:name=".LoginActivity" /> -->
-        <activity android:name=".weather.TestActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <!-- <activity android:name=".SignInActivity" /> -->
+        <!-- <activity android:name=".SplashActivity" /> -->
+        <!-- <activity android:name=".LoginActivity" /> -->
+        <activity android:name=".weather.TestActivity">
+
         </activity>
 
         <receiver

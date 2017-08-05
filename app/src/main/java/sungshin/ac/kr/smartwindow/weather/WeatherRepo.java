@@ -16,6 +16,9 @@ public class WeatherRepo {
     @SerializedName("weather")
     weather weather;
 
+    public error error;
+
+
     public class Result {
         @SerializedName("message")
         String message;
@@ -33,13 +36,13 @@ public class WeatherRepo {
 
     public class weather {
 
-        public List<minutely> minutely = new ArrayList<>();
+        public List<hourly> hourly = new ArrayList<>();
 
-        public List<minutely> getMinutely() {
-            return minutely;
+        public List<hourly> getHourly() {
+            return hourly;
         }
 
-        public class minutely {
+        public class hourly {
             @SerializedName("sky")
             Sky sky;
             @SerializedName("precipitation")
@@ -48,8 +51,6 @@ public class WeatherRepo {
             temperature temperature;
             @SerializedName("wind")
             wind wind;
-//            @SerializedName("humidity")
-//            humidity humidity;
 
             public class Sky {
                 @SerializedName("name")
@@ -109,15 +110,15 @@ public class WeatherRepo {
                 return sky;
             }
 
-            public minutely.precipitation getPrecipitation() {
+            public hourly.precipitation getPrecipitation() {
                 return precipitation;
             }
 
-            public minutely.temperature getTemperature() {
+            public hourly.temperature getTemperature() {
                 return temperature;
             }
 
-            public minutely.wind getWind() {
+            public hourly.wind getWind() {
                 return wind;
             }
 
@@ -126,8 +127,6 @@ public class WeatherRepo {
             public String getHumidity() {
                 return humidity;
             }
-
-            //public minutely.
         }
     }
 
@@ -138,6 +137,4 @@ public class WeatherRepo {
     public weather getWeather() {
         return weather;
     }
-
 }
-
