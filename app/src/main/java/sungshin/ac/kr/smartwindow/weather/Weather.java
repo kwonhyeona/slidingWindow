@@ -14,6 +14,8 @@ public class Weather {
     private String wind_direction;
     private String wind_speed;
     private String icon;
+    private String humidity;
+
     private static Weather weather;
 
     public static Weather getInstance() {
@@ -86,5 +88,13 @@ public class Weather {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getHumidity() {
+        return humidity;
+    }
+
+    public void setHumidity(String humidity) {
+        this.humidity = humidity;
     }
 }
