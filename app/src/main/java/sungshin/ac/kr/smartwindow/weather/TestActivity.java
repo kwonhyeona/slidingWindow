@@ -1,11 +1,7 @@
 package sungshin.ac.kr.smartwindow.weather;
 
 import android.Manifest;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -14,6 +10,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.SyncStateContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +19,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -32,6 +30,8 @@ import sungshin.ac.kr.smartwindow.MainActivity;
 import sungshin.ac.kr.smartwindow.R;
 import sungshin.ac.kr.smartwindow.application.NetworkService;
 import sungshin.ac.kr.smartwindow.service.fcm.Push;
+import sungshin.ac.kr.smartwindow.AlarmUtils;
+import sungshin.ac.kr.smartwindow.receiver.AlarmBraodCastReciever;
 
 public class TestActivity extends AppCompatActivity {
     private TextView tv_temp;
@@ -43,12 +43,20 @@ public class TestActivity extends AppCompatActivity {
     //    private boolean canReadLocation = false;
     private static int REQUEST_CODE_LOCATION = 1;
 
+    public static TestActivity getInstance() {
+        return new TestActivity();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
         tv_temp = (TextView) findViewById(R.id.tv_temp);
+
+        if (!AlarmBraodCastReciever.isLaunched) {
+            AlarmUtils.getInstance().startOneMinuteAlram(this);
+        }
 
         // 사용자의 위치 수신을 위한 세팅
 //        settingGPS();
@@ -61,6 +69,10 @@ public class TestActivity extends AppCompatActivity {
 //        }
 //        Log.i("mytag", "latitude : " + latitude + ", longitude : " + longitude);
 
+        threadProcess();
+    }
+
+    public void threadProcess() {
         latitude = 37.4870600000;   // 임의로 서울 강남구 넣어둠
         longitude = 127.0460400000;
 
@@ -75,7 +87,8 @@ public class TestActivity extends AppCompatActivity {
                     Bundle bundle = msg.getData();
                     String temp = bundle.getString("temp");
 
-                    tv_temp.setText(Double.parseDouble(temp)+"");
+                    tv_temp.setText(temp);
+                    Log.i("mytag", "temp : " + temp);
                 }
 
             }
