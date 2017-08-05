@@ -45,6 +45,8 @@ public class TestActivity extends AppCompatActivity {
     private LocationListener locationListener;      // locationListener는 위치가 변할때 마다 또는 상태가 변할 때마다 위치를 가져오는 리스너
     //    private boolean canReadLocation = false;
     private static int REQUEST_CODE_LOCATION = 1;
+    private String city, county, village;
+    private int stnid;
 
     public static TestActivity getInstance() {
         return new TestActivity();
@@ -56,7 +58,7 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
 
         tv_temp = (TextView) findViewById(R.id.tv_temp);
-        tv_humidity = (TextView)findViewById(R.id.tv_humidity);
+        tv_humidity = (TextView) findViewById(R.id.tv_humidity);
 
         if (!AlarmBraodCastReciever.isLaunched) {
             AlarmUtils.getInstance().startOneMinuteAlram(this);
@@ -79,8 +81,12 @@ public class TestActivity extends AppCompatActivity {
     public void threadProcess() {
         latitude = 37.4870600000;   // 임의로 서울 강남구 넣어둠
         longitude = 127.0460400000;
+        city = "서울";
+        county = "성북구";
+        village = "돈암동";
+        stnid = 108;
 
-        weatherThread = new WeatherThread(TestActivity.this, latitude, longitude);
+        weatherThread = new WeatherThread(TestActivity.this, latitude, longitude, city, county, village, stnid);
         weatherThread.setDaemon(true);
         weatherThread.start();
 
@@ -91,13 +97,22 @@ public class TestActivity extends AppCompatActivity {
                     Bundle bundle = msg.getData();
                     String temp = bundle.getString("temp");
                     String humidity = bundle.getString("humidity");
+                    String dust_value = bundle.getString("dust_value");
+                    String dust_grade = bundle.getString("dust_grade");
 
                     tv_temp.setText(temp);
                     tv_humidity.setText(humidity);
                     Log.i("mytag", "temp : " + temp);
-//                    if(temp > 25) {
-//                        Push.getInstance().sendPush(context, title, message);
-//                    }
+
+                    if (dust_grade.equals("약간나쁨")) {
+                        Push.getInstance().sendPush(TestActivity.this, "dust", "dust_little_bad");
+                    }
+                    if (dust_grade.equals("나쁨")) {
+                        Push.getInstance().sendPush(TestActivity.this, "dust", "dust_bad");
+                    }
+                    if (dust_grade.equals("매우나쁨")) {
+                        Push.getInstance().sendPush(TestActivity.this, "dust", "dust_so_much_bad");
+                    }
                 }
             }
         };
@@ -150,15 +165,24 @@ public class TestActivity extends AppCompatActivity {
         private final static String TAG = "mytag";
         private Context mContext;
         private WeatherRepo weatherRepo;
+        private DustRepo dustRepo;
 
         private int version = 1;
         private String lat;
         private String lon;
+        private String city;
+        private String county;
+        private String village;
+        private int stnid;
 
-        private WeatherThread(Context mContext, double lat, double lon) {
+        private WeatherThread(Context mContext, double lat, double lon, String city, String county, String village, int stnid) {
             this.mContext = mContext;
             this.lat = String.valueOf(lat);
             this.lon = String.valueOf(lon);
+            this.city = city;
+            this.county = county;
+            this.village = village;
+            this.stnid = stnid;
         }
 
         @Override
@@ -167,7 +191,7 @@ public class TestActivity extends AppCompatActivity {
 
             Retrofit client = new Retrofit.Builder().baseUrl("http://apis.skplanetx.com/").addConverterFactory(GsonConverterFactory.create()).build();
             NetworkService service = client.create(NetworkService.class);
-            Call<WeatherRepo> call = service.getBasicWeather(version, lat, lon);
+            Call<WeatherRepo> call = service.getBasicWeather(version, city, county, village);
             call.enqueue(new Callback<WeatherRepo>() {
                 @Override
                 public void onResponse(Call<WeatherRepo> call, Response<WeatherRepo> response) {
@@ -175,12 +199,12 @@ public class TestActivity extends AppCompatActivity {
                         weatherRepo = response.body();
                         Log.d(TAG, "response.raw :" + response.raw());
                         if (weatherRepo.getResult().getCode().equals("9200")) { // 9200 = 성공
-                            Weather.getInstance().setTemperature(weatherRepo.getWeather().getMinutely().get(0).getTemperature().getTc());
-                            Weather.getInstance().setCloud(weatherRepo.getWeather().getMinutely().get(0).getSky().getName());
-                            Weather.getInstance().setWind_direction(weatherRepo.getWeather().getMinutely().get(0).getWind().getWdir());
-                            Weather.getInstance().setWind_speed(weatherRepo.getWeather().getMinutely().get(0).getWind().getWspd());
-                            Weather.getInstance().setIcon(weatherRepo.getWeather().getMinutely().get(0).getSky().getCode());
-                            Weather.getInstance().setHumidity(weatherRepo.getWeather().getMinutely().get(0).getHumidity());
+                            Weather.getInstance().setTemperature(weatherRepo.getWeather().getHourly().get(0).getTemperature().getTc());
+                            //Weather.getInstance().setCloud(weatherRepo.getWeather().getHourly().get(0).getSky().getName());
+                            //Weather.getInstance().setWind_direction(weatherRepo.getWeather().getHourly().get(0).getWind().getWdir());
+                            //Weather.getInstance().setWind_speed(weatherRepo.getWeather().getHourly().get(0).getWind().getWspd());
+                            //Weather.getInstance().setIcon(weatherRepo.getWeather().getHourly().get(0).getSky().getCode());
+                            Weather.getInstance().setHumidity(weatherRepo.getWeather().getHourly().get(0).getHumidity());
 
                             Message msg = Message.obtain();
                             msg.what = 0;
@@ -195,7 +219,9 @@ public class TestActivity extends AppCompatActivity {
                             Log.e(TAG, "메시지 :" + weatherRepo.getResult().getMessage());
                         }
                     } else {
-                        Log.e(TAG, "response 실패 " + response.code() + response.raw());
+                        Log.e(TAG, "response 실패 " + response.code() + response.errorBody().toString());
+                        weatherRepo = response.body();
+                        Log.i(TAG, weatherRepo.error.message + ", " + weatherRepo.error.link + ", " + weatherRepo.error.code);
                     }
                 }
 
@@ -206,7 +232,39 @@ public class TestActivity extends AppCompatActivity {
                 }
             });
 
-
+//            Call<DustRepo> result = service.getDust(version, city, county, village);
+//            result.enqueue(new Callback<DustRepo>() {
+//                @Override
+//                public void onResponse(Call<DustRepo> call, Response<DustRepo> response) {
+//                    if (response.isSuccessful()) {
+//                        dustRepo = response.body();
+//                        if (dustRepo.getResult().getCode().equals("9200")) {
+//                            Dust.getInstance().setValue(dustRepo.getWeather().getDust().get(0).getPm10().getValue());
+//                            Dust.getInstance().setGrade(dustRepo.getWeather().getDust().get(0).getPm10().getGrade());
+//
+//                            Message msg = Message.obtain();
+//                            msg.what = 0;
+//                            Bundle bundle = new Bundle();
+//                            bundle.putSerializable("dust_value", Dust.getInstance().getValue());
+//                            bundle.putSerializable("dust_grade", Dust.getInstance().getGrade());
+//                            msg.setData(bundle);
+//                            handler.sendMessage(msg);
+//
+//                            Log.i(TAG, "미세먼지 양 : " + Dust.getInstance().getValue());
+//                            Log.i(TAG, "미세먼지 등급 : " + Dust.getInstance().getGrade());
+//                        } else {
+//                            Log.e(TAG, "response 실패 " + response.code() + response.errorBody().toString());
+//
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<DustRepo> call, Throwable t) {
+//                    Log.e(TAG, "미세먼지 불러오기 실패 : " + t.getMessage());
+//                    Log.e(TAG, "미세먼지 요청 메세지 : " + call.request());
+//                }
+//            });
         }
     }
 
