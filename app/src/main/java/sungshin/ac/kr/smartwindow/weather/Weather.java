@@ -15,6 +15,8 @@ public class Weather {
     private String wind_speed;
     private String icon;
     private String humidity;
+    private String precipitation_type;
+    private String precipitation_sinceOntime;
 
     private static Weather weather;
 
@@ -24,7 +26,6 @@ public class Weather {
         }
         return weather;
     }
-
 
     public String getTemperature() {
         return temperature;
@@ -96,5 +97,21 @@ public class Weather {
 
     public void setHumidity(String humidity) {
         this.humidity = humidity;
+    }
+
+    public String getPrecipitation_type() {
+        return precipitation_type;
+    }
+
+    public void setPrecipitation_type(String precipitation_type) {
+        this.precipitation_type = precipitation_type;
+    }
+
+    public String getPrecipitation_sinceOntime() {
+        return precipitation_sinceOntime;
+    }
+
+    public void setPrecipitation_sinceOntime(String precipitation_sinceOntime) {
+        this.precipitation_sinceOntime = precipitation_sinceOntime;
     }
 }
