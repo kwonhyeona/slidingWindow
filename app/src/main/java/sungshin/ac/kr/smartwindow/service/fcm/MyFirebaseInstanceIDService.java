@@ -23,7 +23,8 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
-        // Get updated InstanceID token.
+        // token : 사용자 기기별 토큰
+        // 사용자별로 푸시를 보내려할 때 사용
         String token = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + token);
 

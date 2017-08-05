@@ -1,26 +1,37 @@
 package sungshin.ac.kr.smartwindow.weather;
 
 import android.Manifest;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import sungshin.ac.kr.smartwindow.MainActivity;
 import sungshin.ac.kr.smartwindow.R;
 import sungshin.ac.kr.smartwindow.application.NetworkService;
+import sungshin.ac.kr.smartwindow.service.fcm.Push;
 
 public class TestActivity extends AppCompatActivity {
     private TextView tv_temp;
@@ -64,7 +75,7 @@ public class TestActivity extends AppCompatActivity {
                     Bundle bundle = msg.getData();
                     String temp = bundle.getString("temp");
 
-                    tv_temp.setText(temp);
+                    tv_temp.setText(Double.parseDouble(temp)+"");
                 }
 
             }
