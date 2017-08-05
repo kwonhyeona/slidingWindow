@@ -1,14 +1,22 @@
 package sungshin.ac.kr.smartwindow;
 
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
+
+import sungshin.ac.kr.smartwindow.fragment.PageAdapter;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = "MainActivity";
+
+    ViewPager viewPager;
+    PagerAdapter pagerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,6 +28,12 @@ public class MainActivity extends AppCompatActivity {
 //        FirebaseMessaging.getInstance().subscribeToTopic("news");
         FirebaseApp.initializeApp(this);
         Log.d("MainActivity", "Token : " + FirebaseInstanceId.getInstance().getToken());
+
+        viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
+        pagerAdapter = new PageAdapter(getSupportFragmentManager());
+
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(0);
 
     }
 

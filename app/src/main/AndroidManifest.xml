@@ -67,8 +67,7 @@
         <!-- <activity android:name=".SignInActivity" /> -->
         <!-- <activity android:name=".SplashActivity" /> -->
         <!-- <activity android:name=".LoginActivity" /> -->
-        <activity android:name=".weather.TestActivity">
-        </activity>
+        <activity android:name=".weather.TestActivity"></activity>
 
         <receiver
             android:name=".receiver.AlarmBraodCastReciever"
@@ -78,7 +77,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".receiver.AlarmOneMinuteBroadcastReceiver"
             android:enabled="true"

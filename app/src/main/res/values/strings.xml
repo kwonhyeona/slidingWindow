@@ -3,4 +3,7 @@
     <string name="server_domain">192.168.0.8</string>
     <string name="weather_app_key">d8fca7ea-2801-3350-90e2-7c7190135f39</string>
     <string name="project_number">2214781824</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
