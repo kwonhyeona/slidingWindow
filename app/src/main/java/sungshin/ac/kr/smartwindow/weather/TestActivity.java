@@ -17,6 +17,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import junit.framework.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -34,7 +37,7 @@ import sungshin.ac.kr.smartwindow.AlarmUtils;
 import sungshin.ac.kr.smartwindow.receiver.AlarmBraodCastReciever;
 
 public class TestActivity extends AppCompatActivity {
-    private TextView tv_temp;
+    private TextView tv_temp, tv_humidity;
     private WeatherThread weatherThread;
     private Handler handler;
     private double latitude, longitude;
@@ -53,6 +56,7 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.activity_test);
 
         tv_temp = (TextView) findViewById(R.id.tv_temp);
+        tv_humidity = (TextView)findViewById(R.id.tv_humidity);
 
         if (!AlarmBraodCastReciever.isLaunched) {
             AlarmUtils.getInstance().startOneMinuteAlram(this);
@@ -76,7 +80,7 @@ public class TestActivity extends AppCompatActivity {
         latitude = 37.4870600000;   // 임의로 서울 강남구 넣어둠
         longitude = 127.0460400000;
 
-        weatherThread = new WeatherThread(getApplicationContext(), latitude, longitude);
+        weatherThread = new WeatherThread(TestActivity.this, latitude, longitude);
         weatherThread.setDaemon(true);
         weatherThread.start();
 
@@ -86,11 +90,15 @@ public class TestActivity extends AppCompatActivity {
                 if (msg.what == 0) {
                     Bundle bundle = msg.getData();
                     String temp = bundle.getString("temp");
+                    String humidity = bundle.getString("humidity");
 
                     tv_temp.setText(temp);
+                    tv_humidity.setText(humidity);
                     Log.i("mytag", "temp : " + temp);
+//                    if(temp > 25) {
+//                        Push.getInstance().sendPush(context, title, message);
+//                    }
                 }
-
             }
         };
     }
@@ -156,9 +164,10 @@ public class TestActivity extends AppCompatActivity {
         @Override
         public void run() {
             super.run();
+
             Retrofit client = new Retrofit.Builder().baseUrl("http://apis.skplanetx.com/").addConverterFactory(GsonConverterFactory.create()).build();
             NetworkService service = client.create(NetworkService.class);
-            Call<WeatherRepo> call = service.get_Weather_retrofit(version, lat, lon);
+            Call<WeatherRepo> call = service.getBasicWeather(version, lat, lon);
             call.enqueue(new Callback<WeatherRepo>() {
                 @Override
                 public void onResponse(Call<WeatherRepo> call, Response<WeatherRepo> response) {
@@ -166,19 +175,19 @@ public class TestActivity extends AppCompatActivity {
                         weatherRepo = response.body();
                         Log.d(TAG, "response.raw :" + response.raw());
                         if (weatherRepo.getResult().getCode().equals("9200")) { // 9200 = 성공
-                            Weather.getInstance().setTemperature(weatherRepo.getWeather().getHourly().get(0).getTemperature().getTc());
-                            Weather.getInstance().setCloud(weatherRepo.getWeather().getHourly().get(0).getSky().getName());
-                            Weather.getInstance().setWind_direction(weatherRepo.getWeather().getHourly().get(0).getWind().getWdir());
-                            Weather.getInstance().setWind_speed(weatherRepo.getWeather().getHourly().get(0).getWind().getWspd());
-                            Weather.getInstance().setIcon(weatherRepo.getWeather().getHourly().get(0).getSky().getCode());
-
-                            Log.i("mytag", "weather thread, temp (singletone) : " + Weather.getInstance().getTemperature());
+                            Weather.getInstance().setTemperature(weatherRepo.getWeather().getMinutely().get(0).getTemperature().getTc());
+                            Weather.getInstance().setCloud(weatherRepo.getWeather().getMinutely().get(0).getSky().getName());
+                            Weather.getInstance().setWind_direction(weatherRepo.getWeather().getMinutely().get(0).getWind().getWdir());
+                            Weather.getInstance().setWind_speed(weatherRepo.getWeather().getMinutely().get(0).getWind().getWspd());
+                            Weather.getInstance().setIcon(weatherRepo.getWeather().getMinutely().get(0).getSky().getCode());
+                            Weather.getInstance().setHumidity(weatherRepo.getWeather().getMinutely().get(0).getHumidity());
 
                             Message msg = Message.obtain();
                             msg.what = 0;
                             Bundle bundle = new Bundle();
                             bundle.putString("weather", "weather");
                             bundle.putSerializable("temp", Weather.getInstance().getTemperature());
+                            bundle.putSerializable("humidity", Weather.getInstance().getHumidity());
                             msg.setData(bundle);
                             handler.sendMessage(msg);
                         } else {
@@ -186,7 +195,7 @@ public class TestActivity extends AppCompatActivity {
                             Log.e(TAG, "메시지 :" + weatherRepo.getResult().getMessage());
                         }
                     } else {
-                        Log.e(TAG, "response 실패 ");
+                        Log.e(TAG, "response 실패 " + response.code() + response.raw());
                     }
                 }
 
@@ -196,6 +205,8 @@ public class TestActivity extends AppCompatActivity {
                     Log.e(TAG, "요청 메시지 :" + call.request());
                 }
             });
+
+
         }
     }
 
