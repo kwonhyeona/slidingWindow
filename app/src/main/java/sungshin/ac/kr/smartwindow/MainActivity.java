@@ -1,6 +1,5 @@
 package sungshin.ac.kr.smartwindow;
 
-import android.app.NotificationManager;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -87,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (response.isSuccessful()) {
                             Log.d(TAG, "response.body : " + response.body());
-                            if(response.body().message.equals("ok")) {
+                            if(response.body().result.equals("ok")) {
                                 // TODO: 성공했을 때 작업
                                 if(isOpen) {
                                     Toast.makeText(getBaseContext(), "문이 열렸습니다.", Toast.LENGTH_SHORT).show();

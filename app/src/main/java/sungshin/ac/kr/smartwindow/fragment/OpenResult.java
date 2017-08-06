@@ -5,5 +5,5 @@ package sungshin.ac.kr.smartwindow.fragment;
  */
 
 public class OpenResult {
-    public String message;
+    public String result;
 }
