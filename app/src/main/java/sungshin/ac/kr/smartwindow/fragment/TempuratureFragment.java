@@ -5,26 +5,24 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import sungshin.ac.kr.smartwindow.R;
 
 
 public class TempuratureFragment extends android.support.v4.app.Fragment {
-    private static final String TAG = "TempuratureFragment";
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: 필요한 매개변수 있으면 이름 바꾸기
-    private String mParam1;
-    private String mParam2;
+    private String temp;
+    private View v;
+    private TextView tv_temp;
 
     public TempuratureFragment() {
 
     }
 
-    public static TempuratureFragment newInstance() {
+    public static TempuratureFragment newInstance(String temp) {
         TempuratureFragment fragment = new TempuratureFragment();
         Bundle args = new Bundle();
+        args.putString("temp", temp);
         fragment.setArguments(args);
         return fragment;
     }
@@ -32,16 +30,17 @@ public class TempuratureFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+            temp = getArguments().getString("temp");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tempurature, container, false);
+        v = inflater.inflate(R.layout.fragment_tempurature, container, false);
+
+        tv_temp = (TextView)v.findViewById(R.id.textview_temperature_dustindex);
+        tv_temp.setText(temp);
+        return v;
     }
 }

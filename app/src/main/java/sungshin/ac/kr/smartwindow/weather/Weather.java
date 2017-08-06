@@ -15,7 +15,7 @@ public class Weather {
     private String wind_speed;
     private String icon;
     private String humidity;
-    private String precipitation_type;
+    private String precipitation_type;  //현재 강수 타입 (0 : 현상없음 / 1 : 비 / 2 : 비 + 눈 / 3 : 눈)
     private String precipitation_sinceOntime;
 
     private static Weather weather;

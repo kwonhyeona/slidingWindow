@@ -23,10 +23,13 @@
                 android:id="@+id/textview_temperature_dustindex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                tools:text="32C"
+                android:textSize="30sp"
+                android:layout_alignTop="@+id/button_temperature_reload"
                 android:layout_alignParentLeft="true"
-                android:layout_marginLeft="30dp"
-                android:text="32C"
-                android:textSize="30sp"/>
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="28dp" />
             <Button
                 android:id="@+id/button_temperature_reload"
                 android:layout_width="wrap_content"

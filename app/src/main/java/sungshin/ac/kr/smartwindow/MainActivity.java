@@ -6,8 +6,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
+
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.io.PushbackInputStream;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Part;
 import sungshin.ac.kr.smartwindow.fragment.PageAdapter;
 
 import retrofit2.Call;
@@ -31,28 +38,17 @@ public class MainActivity extends AppCompatActivity {
     private WeatherRepo weatherRepo;
     private DustRepo dustRepo;
     private final static String TAG = "mytag";
-    private String api_temp;            // 현재 온도
-    private String api_humidity;        // 현재 습도
-    private String api_precipitation_type;   // 현재 강수 타입 (0 : 현상없음 / 1 : 비 / 2 : 비 + 눈 / 3 : 눈)
-    private String api_precipitation_value;  // 현재 강우량 or 적설량
+//    private String api_humidity;        // 현재 습도
+//    private String api_precipitation_type;   // 현재 강수 타입 (0 : 현상없음 / 1 : 비 / 2 : 비 + 눈 / 3 : 눈)
+//    private String api_precipitation_value;  // 현재 강우량 or 적설량
     private String api_dust_grade;      // 현재 미세먼지 등급
-    private String api_dust_value;      // 현재 미세먼지 수치
-    private TextView tv_dust, tv_dust_grade, tv_temp, tv_humidity;
-
+//    private String api_dust_value;      // 현재 미세먼지 수치
+    private boolean aWeather = false, aDust = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FirebaseApp.initializeApp(this);
-        Log.d("MainActivity", "Token : " + FirebaseInstanceId.getInstance().getToken());
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
-        pagerAdapter = new PageAdapter(getSupportFragmentManager());
-
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(0);
 
         // 기상정보 받아올 지역 초기화
         version = 1;
@@ -67,20 +63,28 @@ public class MainActivity extends AppCompatActivity {
         init();
         initWeatherData();  // 기온, 강수, 습도 받아오기
         initDustData();     // 미세먼지 받아오기
+
+        FirebaseApp.initializeApp(this);
+        Log.d("MainActivity", "Token : " + FirebaseInstanceId.getInstance().getToken());
+
+//        if (aWeather && aDust) {
+//            pagerAdapter = new PageAdapter(getSupportFragmentManager());
+//            viewPager.setAdapter(pagerAdapter);
+//            viewPager.setCurrentItem(0);
+//        }
     }
 
-
     private void init() {
-        tv_temp = (TextView) findViewById(R.id.tv_temp);
-        tv_humidity = (TextView) findViewById(R.id.tv_humidity);
-        tv_dust = (TextView) findViewById(R.id.tv_dust);
-        tv_dust_grade = (TextView) findViewById(R.id.tv_dust_grade);
+        viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
+        // 네트워크 초기화
         networkService = ApplicationController.getInstance().getNetworkService();
     }
 
 
     private void initWeatherData() {
-        Call<WeatherRepo> resultCall = networkService.getBasicWeather(version, city, county, village);
+        Retrofit client = new Retrofit.Builder().baseUrl("http://apis.skplanetx.com/").addConverterFactory(GsonConverterFactory.create()).build();
+        NetworkService service = client.create(NetworkService.class);
+        Call<WeatherRepo> resultCall = service.getBasicWeather(version, city, county, village);
         resultCall.enqueue(new Callback<WeatherRepo>() {
             public void onResponse(Call<WeatherRepo> call, Response<WeatherRepo> response) {
                 if (response.isSuccessful()) {
@@ -91,10 +95,10 @@ public class MainActivity extends AppCompatActivity {
                         Weather.getInstance().setPrecipitation_type(weatherRepo.getWeather().getHourly().get(0).getPrecipitation().getType());
                         Weather.getInstance().setPrecipitation_sinceOntime(weatherRepo.getWeather().getHourly().get(0).getPrecipitation().getSinceOntime());
 
-                        api_temp = Weather.getInstance().getTemperature();
-                        api_humidity = Weather.getInstance().getHumidity();
-                        api_precipitation_type = Weather.getInstance().getPrecipitation_type();
-                        api_precipitation_value = Weather.getInstance().getPrecipitation_sinceOntime();
+//                        api_temp = Weather.getInstance().getTemperature();
+//                        api_humidity = Weather.getInstance().getHumidity();
+//                        api_precipitation_type = Weather.getInstance().getPrecipitation_type();
+//                        api_precipitation_value = Weather.getInstance().getPrecipitation_sinceOntime();
 
                         pushWeatherEvent();
                     } else {
@@ -114,14 +118,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pushWeatherEvent() {
-        tv_temp.setText(api_temp);
-        tv_humidity.setText(api_humidity);
+        aWeather = true;
+        updatePager();
     }
 
     private void initDustData() {
         Log.i("mytag", "initDustData");
-
-        Call<DustRepo> resultCall = networkService.getDust(version, lat, lon);
+        Retrofit client = new Retrofit.Builder().baseUrl("http://apis.skplanetx.com/").addConverterFactory(GsonConverterFactory.create()).build();
+        NetworkService service = client.create(NetworkService.class);
+        Call<DustRepo> resultCall = service.getDust(version, lat, lon);
         resultCall.enqueue(new Callback<DustRepo>() {
             @Override
             public void onResponse(Call<DustRepo> call, Response<DustRepo> response) {
@@ -132,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
                         Dust.getInstance().setGrade(dustRepo.getWeather().getDust().get(0).getPm10().getGrade());
 
                         api_dust_grade = Dust.getInstance().getGrade();
-                        api_dust_value = Dust.getInstance().getValue();
+//                        api_dust_value = Dust.getInstance().getValue();
 
                         Log.i(TAG, "미세먼지 양 : " + Dust.getInstance().getValue());
                         Log.i(TAG, "미세먼지 등급 : " + Dust.getInstance().getGrade());
@@ -153,17 +158,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pushDustEvent() {
-        tv_dust.setText(api_dust_value);
-        tv_dust_grade.setText(api_dust_grade);
-
+        // 미세먼지 상태가 변했을때 보내준다
+        aDust = true;
         if (api_dust_grade.equals("약간나쁨")) {
-            Push.getInstance().sendPush(MainActivity.this, "dust", "dust_little_bad");
+            Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_1).toString());
         }
         if (api_dust_grade.equals("나쁨")) {
-            Push.getInstance().sendPush(MainActivity.this, "dust", "dust_bad");
+            Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_2).toString());
         }
         if (api_dust_grade.equals("매우나쁨")) {
-            Push.getInstance().sendPush(MainActivity.this, "dust", "dust_so_much_bad");
+            Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_3).toString());
+        }
+        updatePager();
+    }
+
+    private void updatePager() {
+        if (aWeather && aDust) {
+            pagerAdapter = new PageAdapter(getSupportFragmentManager());
+            viewPager.setAdapter(pagerAdapter);
+            viewPager.setCurrentItem(0);
         }
     }
 }

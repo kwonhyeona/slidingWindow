@@ -7,24 +7,25 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import sungshin.ac.kr.smartwindow.R;
 
 public class RainFragment extends android.support.v4.app.Fragment {
-    private static final String TAG = "RainFragment";
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
+    private String type;
+    private String sinceOntime;
+    private View v;
+    private TextView tv_onTime;
 
     public RainFragment() {
 
     }
 
-    public static RainFragment newInstance() {
+    public static RainFragment newInstance(String type, String sinceOntime) {
         RainFragment fragment = new RainFragment();
         Bundle args = new Bundle();
+        args.putString("type", type);
+        args.putString("sinceOntime", sinceOntime);
         fragment.setArguments(args);
         return fragment;
     }
@@ -32,16 +33,17 @@ public class RainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+            type = getArguments().getString("type");
+            sinceOntime = getArguments().getString("sinceOntime");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_rain, container, false);
+        v = inflater.inflate(R.layout.fragment_rain, container, false);
+        tv_onTime = (TextView)v.findViewById(R.id.textview_rain_rainfall);
+        tv_onTime.setText(sinceOntime);
+        return v;
     }
 }

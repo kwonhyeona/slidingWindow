@@ -6,6 +6,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 import android.view.ViewGroup;
 
+import sungshin.ac.kr.smartwindow.weather.Dust;
+import sungshin.ac.kr.smartwindow.weather.Weather;
+
 /**
  * Created by apple on 2017. 8. 5..
  */
@@ -22,13 +25,13 @@ public class PageAdapter extends FragmentStatePagerAdapter {
 
         switch (position){
             case 0:
-                return new DustFragment().newInstance();
+                return new DustFragment().newInstance(Dust.getInstance().getGrade(), Dust.getInstance().getValue());
             case 1:
-                return new TempuratureFragment().newInstance();
+                return new TempuratureFragment().newInstance(Weather.getInstance().getTemperature());
             case 2:
-                return new HumidityFragment().newInstance();
+                return new HumidityFragment().newInstance(Weather.getInstance().getHumidity());
             case 3:
-                return new RainFragment().newInstance();
+                return new RainFragment().newInstance(Weather.getInstance().getPrecipitation_type(), Weather.getInstance().getPrecipitation_sinceOntime());
             default:
                 return null;
         }
