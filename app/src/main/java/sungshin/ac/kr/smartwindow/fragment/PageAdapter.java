@@ -27,7 +27,8 @@ public class PageAdapter extends FragmentStatePagerAdapter {
             case 0:
                 return new DustFragment().newInstance(Dust.getInstance().getGrade(), Dust.getInstance().getValue());
             case 1:
-                return new TemperatureFragment().newInstance(Weather.getInstance().getTemperature());
+                return new TemperatureFragment().newInstance(Weather.getInstance().getTemperature(),
+                        Weather.getInstance().getTmax(), Weather.getInstance().getTmin());
             case 2:
                 return new HumidityFragment().newInstance(Weather.getInstance().getHumidity());
             case 3:
