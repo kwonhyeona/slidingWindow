@@ -1,20 +1,23 @@
 package sungshin.ac.kr.smartwindow;
 
+import android.app.NotificationManager;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.iid.FirebaseInstanceId;
-import sungshin.ac.kr.smartwindow.fragment.PageAdapter;
+import android.widget.Toast;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import sungshin.ac.kr.smartwindow.application.ApplicationController;
 import sungshin.ac.kr.smartwindow.application.NetworkService;
+import sungshin.ac.kr.smartwindow.fragment.OpenResult;
+import sungshin.ac.kr.smartwindow.fragment.PageAdapter;
 import sungshin.ac.kr.smartwindow.service.fcm.Push;
 import sungshin.ac.kr.smartwindow.weather.Dust;
 import sungshin.ac.kr.smartwindow.weather.DustRepo;
@@ -43,18 +46,65 @@ public class MainActivity extends AppCompatActivity {
     private String api_dust_grade;      // 현재 미세먼지 등급
     private String api_dust_value;      // 현재 미세먼지 수치
     private TextView tv_dust, tv_dust_grade, tv_temp, tv_humidity;
+    private Switch openSwitch;
 
+    private NetworkService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        FirebaseApp.initializeApp(this);
-        Log.d(TAG, "Token : " + FirebaseInstanceId.getInstance().getToken());
+        networkService = ApplicationController.getInstance().getNetworkService();
+        NotificationManager nm =
+                (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
+        // 등록된 notification 을 제거 한다.
+        nm.cancel(0);
+
+
+
+//        FirebaseApp.initializeApp(this);
+//        Log.d(TAG, "Token : " + FirebaseInstanceId.getInstance().getToken());
+
+        openSwitch = (Switch) findViewById(R.id.switch_main_open);
         viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
         pagerAdapter = new PageAdapter(getSupportFragmentManager());
+
+        openSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                final boolean isOpen = b;
+                //// TODO: 2017. 8. 5. 서버랑 문 여닫아라 통신하기
+                int openValue = 0;
+                if(!b){ openValue = 1; }
+
+                Call<OpenResult> sendOpenValue = service.sendOpenValue(openValue);
+                sendOpenValue.enqueue(new Callback<OpenResult>() {
+                    @Override
+                    public void onResponse(Call<OpenResult> call, Response<OpenResult> response) {
+
+                        if (response.isSuccessful()) {
+                            if(response.body().message.equals("ok")) {
+                                // TODO: 성공했을 때 작업
+                                if(isOpen) {
+                                    Toast.makeText(getBaseContext(), "문이 열렸습니다.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getBaseContext(), "문이 닫혔습니다.", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<OpenResult> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -165,6 +215,9 @@ public class MainActivity extends AppCompatActivity {
                         Log.i(TAG, "미세먼지 양 : " + Dust.getInstance().getValue());
                         Log.i(TAG, "미세먼지 등급 : " + Dust.getInstance().getGrade());
 
+                        tv_dust.setText(api_dust_value);
+                        tv_dust_grade.setText(api_dust_grade);
+
                         pushDustEvent();
                     }
                 } else {
@@ -181,17 +234,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pushDustEvent() {
-        tv_dust.setText(api_dust_value);
-        tv_dust_grade.setText(api_dust_grade);
-
         if (api_dust_grade.equals("약간나쁨")) {
             Push.getInstance().sendPush(MainActivity.this, "dust", "dust_little_bad");
         }
-        if (api_dust_grade.equals("나쁨")) {
+        else if (api_dust_grade.equals("나쁨")) {
             Push.getInstance().sendPush(MainActivity.this, "dust", "dust_bad");
         }
-        if (api_dust_grade.equals("매우나쁨")) {
+        else if (api_dust_grade.equals("매우나쁨")) {
             Push.getInstance().sendPush(MainActivity.this, "dust", "dust_so_much_bad");
+        }
+        else if (api_dust_grade.equals("좋음")) {
+            Push.getInstance().sendPush(MainActivity.this, "dust", "dust_good");
         }
     }
 

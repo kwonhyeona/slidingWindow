@@ -3,7 +3,9 @@ package sungshin.ac.kr.smartwindow.application;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
+import sungshin.ac.kr.smartwindow.fragment.OpenResult;
 import sungshin.ac.kr.smartwindow.weather.DustRepo;
 import sungshin.ac.kr.smartwindow.weather.WeatherRepo;
 
@@ -26,10 +28,10 @@ public interface NetworkService {
 
     // 미세먼지
     @Headers({"Accept: application/json", "appKey: 05a07ead-ae2c-350a-b4bb-05c54a651176"})
-    @GET("weather" +
-            "/dust")
+    @GET("weather/dust")
     Call<DustRepo> getDust(@Query("version") int version,
                            @Query("lat") String lat, @Query("lon") String lon);
 
-
+    @GET("beta/openTest/{isClose}")
+    Call<OpenResult> sendOpenValue(@Path("isClose") int isClose);
 }
