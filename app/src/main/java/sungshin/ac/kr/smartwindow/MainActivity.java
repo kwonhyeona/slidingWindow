@@ -11,9 +11,14 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 import sungshin.ac.kr.smartwindow.application.ApplicationController;
 import sungshin.ac.kr.smartwindow.application.NetworkService;
 import sungshin.ac.kr.smartwindow.fragment.OpenResult;
@@ -39,16 +44,11 @@ public class MainActivity extends AppCompatActivity {
     private double latitude, longitude;
     private WeatherRepo weatherRepo;
     private DustRepo dustRepo;
-    private String api_temp;            // 현재 온도
-    private String api_humidity;        // 현재 습도
-    private String api_precipitation_type;   // 현재 강수 타입 (0 : 현상없음 / 1 : 비 / 2 : 비 + 눈 / 3 : 눈)
-    private String api_precipitation_value;  // 현재 강우량 or 적설량
     private String api_dust_grade;      // 현재 미세먼지 등급
-    private String api_dust_value;      // 현재 미세먼지 수치
+    private String api_dust_value;      // 현재 미세먼지 값
     private TextView tv_dust, tv_dust_grade, tv_temp, tv_humidity;
     private Switch openSwitch;
-
-    private NetworkService service;
+    private boolean aWeather = false, aDust = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +56,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         networkService = ApplicationController.getInstance().getNetworkService();
-        NotificationManager nm =
-                (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-
-        // 등록된 notification 을 제거 한다.
-        nm.cancel(0);
+//        NotificationManager nm =
+//                (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+//
+//        // 등록된 notification 을 제거 한다.
+//        nm.cancel(0);
 
 
 
@@ -74,17 +74,19 @@ public class MainActivity extends AppCompatActivity {
         openSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                Log.d(TAG, "Switch is : " + b);
                 final boolean isOpen = b;
                 //// TODO: 2017. 8. 5. 서버랑 문 여닫아라 통신하기
                 int openValue = 0;
                 if(!b){ openValue = 1; }
 
-                Call<OpenResult> sendOpenValue = service.sendOpenValue(openValue);
+                Call<OpenResult> sendOpenValue = networkService.sendOpenValue(openValue);
                 sendOpenValue.enqueue(new Callback<OpenResult>() {
                     @Override
                     public void onResponse(Call<OpenResult> call, Response<OpenResult> response) {
 
                         if (response.isSuccessful()) {
+                            Log.d(TAG, "response.body : " + response.body());
                             if(response.body().message.equals("ok")) {
                                 // TODO: 성공했을 때 작업
                                 if(isOpen) {
@@ -100,12 +102,30 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<OpenResult> call, Throwable t) {
-
+                        Log.d(TAG, "response.body : 실패");
                     }
                 });
             }
         });
 
+        // 기상정보 받아올 지역 초기화
+        version = 1;
+        city = "서울";
+        county = "성북구";
+        village = "돈암동";
+        latitude = 37.4870600000;   // 임의로 서울 강남구 넣어둠
+        longitude = 127.0460400000;
+        lat = String.valueOf(latitude);
+        lon = String.valueOf(longitude);
+
+        FirebaseApp.initializeApp(this);
+        Log.d(TAG, "Token : " + FirebaseInstanceId.getInstance().getToken());
+
+        init();
+        initWeatherData();  // 기온, 강수, 습도 받아오기
+        initDustData();     // 미세먼지 받아오기
+
+        pagerAdapter = new PageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -131,34 +151,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         viewPager.setCurrentItem(0);
-
-        // 기상정보 받아올 지역 초기화
-        version = 1;
-        city = "서울";
-        county = "성북구";
-        village = "돈암동";
-        latitude = 37.4870600000;   // 임의로 서울 강남구 넣어둠
-        longitude = 127.0460400000;
-        lat = String.valueOf(latitude);
-        lon = String.valueOf(longitude);
-
-        init();
-        initWeatherData();  // 기온, 강수, 습도 받아오기
-        initDustData();     // 미세먼지 받아오기
     }
 
-
     private void init() {
-        tv_temp = (TextView) findViewById(R.id.tv_temp);
-        tv_humidity = (TextView) findViewById(R.id.tv_humidity);
-        tv_dust = (TextView) findViewById(R.id.tv_dust);
-        tv_dust_grade = (TextView) findViewById(R.id.tv_dust_grade);
+        viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
+        // 네트워크 초기화
         networkService = ApplicationController.getInstance().getNetworkService();
     }
 
 
     private void initWeatherData() {
-        Call<WeatherRepo> resultCall = networkService.getBasicWeather(version, city, county, village);
+        Retrofit client = new Retrofit.Builder().baseUrl("http://apis.skplanetx.com/").addConverterFactory(GsonConverterFactory.create()).build();
+        NetworkService service = client.create(NetworkService.class);
+        Call<WeatherRepo> resultCall = service.getBasicWeather(version, city, county, village);
         resultCall.enqueue(new Callback<WeatherRepo>() {
             public void onResponse(Call<WeatherRepo> call, Response<WeatherRepo> response) {
                 if (response.isSuccessful()) {
@@ -168,11 +173,6 @@ public class MainActivity extends AppCompatActivity {
                         Weather.getInstance().setHumidity(weatherRepo.getWeather().getHourly().get(0).getHumidity());
                         Weather.getInstance().setPrecipitation_type(weatherRepo.getWeather().getHourly().get(0).getPrecipitation().getType());
                         Weather.getInstance().setPrecipitation_sinceOntime(weatherRepo.getWeather().getHourly().get(0).getPrecipitation().getSinceOntime());
-
-                        api_temp = Weather.getInstance().getTemperature();
-                        api_humidity = Weather.getInstance().getHumidity();
-                        api_precipitation_type = Weather.getInstance().getPrecipitation_type();
-                        api_precipitation_value = Weather.getInstance().getPrecipitation_sinceOntime();
 
                         pushWeatherEvent();
                     } else {
@@ -192,14 +192,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pushWeatherEvent() {
-        tv_temp.setText(api_temp);
-        tv_humidity.setText(api_humidity);
+        aWeather = true;
+        updatePager();
     }
 
     private void initDustData() {
-        Log.i("mytag", "initDustData");
-
-        Call<DustRepo> resultCall = networkService.getDust(version, lat, lon);
+        Retrofit client = new Retrofit.Builder().baseUrl("http://apis.skplanetx.com/").addConverterFactory(GsonConverterFactory.create()).build();
+        NetworkService service = client.create(NetworkService.class);
+        Call<DustRepo> resultCall = service.getDust(version, lat, lon);
         resultCall.enqueue(new Callback<DustRepo>() {
             @Override
             public void onResponse(Call<DustRepo> call, Response<DustRepo> response) {
@@ -214,9 +214,6 @@ public class MainActivity extends AppCompatActivity {
 
                         Log.i(TAG, "미세먼지 양 : " + Dust.getInstance().getValue());
                         Log.i(TAG, "미세먼지 등급 : " + Dust.getInstance().getGrade());
-
-                        tv_dust.setText(api_dust_value);
-                        tv_dust_grade.setText(api_dust_grade);
 
                         pushDustEvent();
                     }
@@ -234,8 +231,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void pushDustEvent() {
+        // 미세먼지 상태가 변했을때 보내준다
+        aDust = true;
+
         if (api_dust_grade.equals("약간나쁨")) {
-            Push.getInstance().sendPush(MainActivity.this, "dust", "dust_little_bad");
+            Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_1).toString());
         }
         else if (api_dust_grade.equals("나쁨")) {
             Push.getInstance().sendPush(MainActivity.this, "dust", "dust_bad");
@@ -243,8 +243,14 @@ public class MainActivity extends AppCompatActivity {
         else if (api_dust_grade.equals("매우나쁨")) {
             Push.getInstance().sendPush(MainActivity.this, "dust", "dust_so_much_bad");
         }
-        else if (api_dust_grade.equals("좋음")) {
-            Push.getInstance().sendPush(MainActivity.this, "dust", "dust_good");
+        updatePager();
+    }
+
+    private void updatePager() {
+        if (aWeather && aDust) {
+            pagerAdapter = new PageAdapter(getSupportFragmentManager());
+            viewPager.setAdapter(pagerAdapter);
+            viewPager.setCurrentItem(0);
         }
     }
 

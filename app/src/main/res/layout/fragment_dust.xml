@@ -8,42 +8,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_weight="3"
             android:padding="80dp"
-            android:src="@drawable/dust"
-            android:layout_weight="3"/>
+            android:src="@drawable/dust" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center_vertical">
+
             <TextView
-                android:id="@+id/textview_dust_dustvalue"
+                android:id="@+id/textview_dust_grade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
                 android:text="높음"
-                android:textSize="30sp"/>
+                android:textSize="30sp" />
+
             <TextView
-                android:id="@+id/textview_dust_dustgrade"
+                android:id="@+id/textview_dust_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginLeft="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="150dp"
                 android:text="높음"
-                android:textSize="30sp"/>
+                android:textSize="30sp" />
             <Button
                 android:id="@+id/button_dust_reload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
-                android:text="새로고침"/>
+                android:text="새로고침" />
         </RelativeLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
