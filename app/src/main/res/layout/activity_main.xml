@@ -22,9 +22,40 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-    <Switch
-        android:id="@+id/switch_main_open"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <RadioGroup
+            android:id="@+id/radiogroup_main_radiogroup"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:background="@drawable/outline"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:layout_marginLeft="1dp"
+                android:id="@+id/radiobutton_main_open"
+                android:background="@drawable/toggle_switch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Open"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="1dp"
+                android:layout_marginBottom="1dp"
+                android:id="@+id/radiobutton_main_close"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/toggle_switch"
+                android:button="@null"
+                android:gravity="center"
+                android:text="Close"
+                android:textColor="@color/white" />
+        </RadioGroup>
     </LinearLayout>
 </LinearLayout>
