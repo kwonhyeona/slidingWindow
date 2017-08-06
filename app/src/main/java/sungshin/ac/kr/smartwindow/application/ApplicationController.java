@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApplicationController extends Application {
     static Context context;
     private static ApplicationController instance;    // 먼저 어플리케이션 인스턴스 객체를 하나 선언
-    private static String baseUrl = "http://apis.skplanetx.com/";  // 베이스 url 초기화
+    private static String baseUrl = "https://khktzigfbd.execute-api.ap-northeast-2.amazonaws.com/";  // 베이스 url 초기화
     private NetworkService networkService;
 
     public static Context getContext() {
