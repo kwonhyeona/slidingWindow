@@ -10,6 +10,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.Circle;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -48,27 +49,53 @@ public class MainActivity extends AppCompatActivity {
     private TextView tv_dust, tv_dust_grade, tv_temp, tv_humidity;
     private Switch openSwitch;
     private boolean aWeather = false, aDust = false;
+    private CircleAnimIndicator circleAnimIndicator;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        networkService = ApplicationController.getInstance().getNetworkService();
-//        NotificationManager nm =
-//                (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-//
-//        // 등록된 notification 을 제거 한다.
-//        nm.cancel(0);
-
-
-
-//        FirebaseApp.initializeApp(this);
-//        Log.d(TAG, "Token : " + FirebaseInstanceId.getInstance().getToken());
-
-        openSwitch = (Switch) findViewById(R.id.switch_main_open);
-        viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
         pagerAdapter = new PageAdapter(getSupportFragmentManager());
+        // 기상정보 받아올 지역 초기화
+        version = 1;
+        city = "서울";
+        county = "성북구";
+        village = "돈암동";
+        latitude = 37.4870600000;   // 임의로 서울 강남구 넣어둠
+        longitude = 127.0460400000;
+        lat = String.valueOf(latitude);
+        lon = String.valueOf(longitude);
+
+        init();
+        initIndicaotor();
+        initWeatherData();  // 기온, 강수, 습도 받아오기
+        initDustData();     // 미세먼지 받아오기
+
+        pagerAdapter = new PageAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                circleAnimIndicator.selectDot(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                /*
+                 * state 종류
+                 * 0 : SCROLL_STATE_IDLE
+                 * 1 : SCROLL_STATE_DRAGGING
+                 * 2 : SCROLL_STATE_SETTLING
+                 */
+            }
+        });
+        viewPager.setCurrentItem(0);
 
         openSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -106,56 +133,25 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-
-        // 기상정보 받아올 지역 초기화
-        version = 1;
-        city = "서울";
-        county = "성북구";
-        village = "돈암동";
-        latitude = 37.4870600000;   // 임의로 서울 강남구 넣어둠
-        longitude = 127.0460400000;
-        lat = String.valueOf(latitude);
-        lon = String.valueOf(longitude);
-
-        FirebaseApp.initializeApp(this);
-        Log.d(TAG, "Token : " + FirebaseInstanceId.getInstance().getToken());
-
-        init();
-        initWeatherData();  // 기온, 강수, 습도 받아오기
-        initDustData();     // 미세먼지 받아오기
-
-        pagerAdapter = new PageAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                Log.d(TAG, "onPageScrolled position: " + position);
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                Log.d(TAG, "onPageSelected position: " + position);
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                /*
-                 * state 종류
-                 * 0 : SCROLL_STATE_IDLE
-                 * 1 : SCROLL_STATE_DRAGGING
-                 * 2 : SCROLL_STATE_SETTLING
-                 */
-
-                Log.d(TAG, "onPageScrollStateChanged state: " + state);
-            }
-        });
-        viewPager.setCurrentItem(0);
     }
 
     private void init() {
-        viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
         // 네트워크 초기화
         networkService = ApplicationController.getInstance().getNetworkService();
+        openSwitch = (Switch) findViewById(R.id.switch_main_open);
+        viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
+        circleAnimIndicator = (CircleAnimIndicator)findViewById(R.id.circleAnimIndicator);
+        FirebaseApp.initializeApp(this);
+        Log.d(TAG, "Token : " + FirebaseInstanceId.getInstance().getToken());
+    }
+
+    private void initIndicaotor() {
+        //원사이의 간격
+        circleAnimIndicator.setItemMargin(15);
+        //애니메이션 속도
+        circleAnimIndicator.setAnimDuration(300);
+        //indecator 생성
+        circleAnimIndicator.createDotPanel(4, R.drawable.circle_white, R.drawable.circle_blue);
     }
 
 
@@ -172,6 +168,8 @@ public class MainActivity extends AppCompatActivity {
                         Weather.getInstance().setHumidity(weatherRepo.getWeather().getHourly().get(0).getHumidity());
                         Weather.getInstance().setPrecipitation_type(weatherRepo.getWeather().getHourly().get(0).getPrecipitation().getType());
                         Weather.getInstance().setPrecipitation_sinceOntime(weatherRepo.getWeather().getHourly().get(0).getPrecipitation().getSinceOntime());
+                        Weather.getInstance().setTmax(weatherRepo.getWeather().getHourly().get(0).getTemperature().getTmax());
+                        Weather.getInstance().setTmin(weatherRepo.getWeather().getHourly().get(0).getTemperature().getTmin());
 
                         pushWeatherEvent();
                     } else {

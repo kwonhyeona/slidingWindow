@@ -17,6 +17,8 @@ public class Weather {
     private String humidity;
     private String precipitation_type;  //현재 강수 타입 (0 : 현상없음 / 1 : 비 / 2 : 비 + 눈 / 3 : 눈)
     private String precipitation_sinceOntime;
+    private String tmax;
+    private String tmin;
 
     private static Weather weather;
 
@@ -25,6 +27,22 @@ public class Weather {
             weather = new Weather();
         }
         return weather;
+    }
+
+    public String getTmax() {
+        return tmax;
+    }
+
+    public void setTmax(String tmax) {
+        this.tmax = tmax;
+    }
+
+    public String getTmin() {
+        return tmin;
+    }
+
+    public void setTmin(String tmin) {
+        this.tmin = tmin;
     }
 
     public String getTemperature() {

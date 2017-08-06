@@ -1,0 +1,115 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorSky"
+    tools:context="sungshin.ac.kr.smartwindow.fragment.TemperatureFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/temperature" />
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="현재 기온 : "
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textBasic"/>
+
+            <TextView
+                android:id="@+id/textview_temperature_dustindex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textLarge"
+                android:textColor="@color/colorWhite"
+                tools:text="32" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textBasic"
+                android:textColor="@color/colorWhite"
+                android:text="°C" />
+        </LinearLayout>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:background="@color/colorGray"/>
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오늘의 최저 기온 : "
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textBasic"/>
+
+            <TextView
+                android:id="@+id/textview_temperature_minimum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textBasic"
+                android:textColor="@color/colorWhite"
+                tools:text="32" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textBasic"
+                android:textColor="@color/colorWhite"
+                android:text="°C" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오늘의 최고 기온 : "
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textBasic"/>
+
+            <TextView
+                android:id="@+id/textview_temperature_maximum"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textBasic"
+                android:textColor="@color/colorWhite"
+                tools:text="32" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/textBasic"
+                android:textColor="@color/colorWhite"
+                android:text="°C" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>
