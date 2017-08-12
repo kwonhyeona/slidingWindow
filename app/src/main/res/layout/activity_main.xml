@@ -12,7 +12,7 @@
     android:background="@color/colorSky">
 
     <Button
-        android:id="@+id/button_reload"
+        android:id="@+id/button_dust_reload"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="right"
