@@ -5,6 +5,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private Switch openSwitch;
     private boolean aWeather = false, aDust = false;
     private CircleAnimIndicator circleAnimIndicator;
+    private Button btnReload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +98,14 @@ public class MainActivity extends AppCompatActivity {
         });
         viewPager.setCurrentItem(0);
 
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initWeatherData();
+                initDustData();
+            }
+        });
+
         openSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -138,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         openSwitch = (Switch) findViewById(R.id.switch_main_open);
         viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
         circleAnimIndicator = (CircleAnimIndicator)findViewById(R.id.circleAnimIndicator);
+        btnReload = (Button)findViewById(R.id.button_reload);
         FirebaseApp.initializeApp(this);
         Log.d(TAG, "Token : " + FirebaseInstanceId.getInstance().getToken());
     }
