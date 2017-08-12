@@ -67,6 +67,7 @@ public class CircleAnimIndicator extends LinearLayout {
             imageDot[i] = new ImageView(mContext);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams
                     (LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
             params.topMargin = itemMargin;
             params.bottomMargin = itemMargin;
             params.leftMargin = itemMargin;
@@ -76,6 +77,7 @@ public class CircleAnimIndicator extends LinearLayout {
             imageDot[i].setLayoutParams(params);
             imageDot[i].setImageResource(defaultCircle);
             imageDot[i].setTag(imageDot[i].getId(), false);
+
             this.addView(imageDot[i]);
         }
 
@@ -104,7 +106,6 @@ public class CircleAnimIndicator extends LinearLayout {
         }
     }
 
-
     /**
      * 선택된 점의 애니메이션
      *
@@ -123,7 +124,6 @@ public class CircleAnimIndicator extends LinearLayout {
         view.startAnimation(anim);
         view.setTag(view.getId(), true);
     }
-
 
     /**
      * 선택되지 않은 점의 애니메이션

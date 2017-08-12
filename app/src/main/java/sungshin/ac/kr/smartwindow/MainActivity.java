@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 initWeatherData();
                 initDustData();
+                viewPager.setCurrentItem(0);
             }
         });
 
