@@ -52,6 +52,7 @@ public class WeatherRepo {
             @SerializedName("wind")
             wind wind;
 
+
             public class Sky {
                 @SerializedName("name")
                 String name;
@@ -85,9 +86,20 @@ public class WeatherRepo {
             public class temperature {
                 @SerializedName("tc")
                 String tc; // 현재 기온
-
+                @SerializedName("tmax")
+                String tmax;
+                @SerializedName("tmin")
+                String tmin;
                 public String getTc() {
                     return tc;
+                }
+
+                public String getTmax() {
+                    return tmax;
+                }
+
+                public String getTmin() {
+                    return tmin;
                 }
             }
 
@@ -117,6 +129,7 @@ public class WeatherRepo {
             public hourly.temperature getTemperature() {
                 return temperature;
             }
+
 
             public hourly.wind getWind() {
                 return wind;
