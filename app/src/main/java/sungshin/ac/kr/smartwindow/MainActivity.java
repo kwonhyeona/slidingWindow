@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        pagerAdapter = new PageAdapter(getSupportFragmentManager());
         // 기상정보 받아올 지역 초기화
         version = 1;
         city = "서울";
