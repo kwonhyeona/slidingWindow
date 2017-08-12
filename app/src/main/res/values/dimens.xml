@@ -6,4 +6,5 @@
     <dimen name="textBasic">15sp</dimen>
     <dimen name="textSmall">12sp</dimen>
     <dimen name="textLarge">20sp</dimen>
+    <dimen name="textVerySmall">10sp</dimen>
 </resources>

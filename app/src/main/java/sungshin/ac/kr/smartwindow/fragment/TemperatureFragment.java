@@ -13,7 +13,7 @@ import sungshin.ac.kr.smartwindow.R;
 
 
 public class TemperatureFragment extends android.support.v4.app.Fragment {
-    private String temp;
+    private String temp, tmax, tmin;
     private View v;
     private TextView tv_temp;
     private TextView tv_tmax;
@@ -36,7 +36,9 @@ public class TemperatureFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            temp = getArguments().getString("temp");
+        temp = getArguments().getString("temp");
+        tmax = getArguments().getString("tmax");
+        tmin = getArguments().getString("tmin");
     }
 
     @Override
@@ -45,10 +47,12 @@ public class TemperatureFragment extends android.support.v4.app.Fragment {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_temperature, container, false);
 
-        tv_temp = (TextView)v.findViewById(R.id.textview_temperature_dustindex);
-        tv_tmax = (TextView)v.findViewById(R.id.textview_temperature_maximum);
-        tv_tmin = (TextView)v.findViewById(R.id.textview_temperature_minimum);
+        tv_temp = (TextView) v.findViewById(R.id.textview_temperature_dustindex);
+        tv_tmax = (TextView) v.findViewById(R.id.textview_temperature_maximum);
+        tv_tmin = (TextView) v.findViewById(R.id.textview_temperature_minimum);
         tv_temp.setText(temp);
+        tv_tmax.setText(tmax);
+        tv_tmin.setText(tmin);
         return v;
     }
 }

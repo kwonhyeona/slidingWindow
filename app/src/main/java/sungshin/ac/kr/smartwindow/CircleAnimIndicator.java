@@ -74,6 +74,8 @@ public class CircleAnimIndicator extends LinearLayout {
             params.rightMargin = itemMargin;
             params.gravity = Gravity.CENTER;
 
+            imageDot[i].setScaleX(10.1f);
+            imageDot[i].setScaleY(10.1f);
             imageDot[i].setLayoutParams(params);
             imageDot[i].setImageResource(defaultCircle);
             imageDot[i].setTag(imageDot[i].getId(), false);
@@ -95,12 +97,12 @@ public class CircleAnimIndicator extends LinearLayout {
         for (int i = 0; i < imageDot.length; i++) {
             if (i == position) {
                 imageDot[i].setImageResource(mSelectCircle);
-                selectScaleAnim(imageDot[i], 10f, 10.5f);
+                selectScaleAnim(imageDot[i], 1.5f, 1.5f);
             } else {
 
                 if ((boolean) imageDot[i].getTag(imageDot[i].getId()) == true) {
                     imageDot[i].setImageResource(mDefaultCircle);
-                    defaultScaleAnim(imageDot[i], 10.5f, 10f);
+                    defaultScaleAnim(imageDot[i], 1.5f, 1.5f);
                 }
             }
         }
