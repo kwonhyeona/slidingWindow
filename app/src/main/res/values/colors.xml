@@ -13,4 +13,9 @@
     <color name="colorDust3">#baa58b</color>
     <color name="colorDust4">#70614f</color>
     <color name="colorDust5">#302a21</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="beige">#E89D61</color>
+    <color name="dark_beige">#9B5822</color>
+    <color name="transparent">#00000000</color>
 </resources>
