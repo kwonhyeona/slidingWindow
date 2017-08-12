@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     //Back 키 두번 클릭 관련 변수
     private final long FINSH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
-
     ViewPager viewPager;
     PagerAdapter pagerAdapter;
     private NetworkService networkService;
@@ -46,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private DustRepo dustRepo;
     private String api_dust_grade;      // 현재 미세먼지 등급
     private String api_dust_value;      // 현재 미세먼지 값
-    private TextView tv_dust, tv_dust_grade, tv_temp, tv_humidity;
     private Switch openSwitch;
     private boolean aWeather = false, aDust = false;
     private CircleAnimIndicator circleAnimIndicator;
@@ -100,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
         openSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                Log.d(TAG, "Switch is : " + b);
                 final boolean isOpen = b;
                 //// TODO: 2017. 8. 5. 서버랑 문 여닫아라 통신하기
                 int openValue = 0;
