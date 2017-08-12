@@ -6,6 +6,9 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -46,9 +49,9 @@ public class MainActivity extends AppCompatActivity {
     private String api_dust_grade;      // 현재 미세먼지 등급
     private String api_dust_value;      // 현재 미세먼지 값
     private TextView tv_dust, tv_dust_grade, tv_temp, tv_humidity;
-
     private boolean aWeather = false, aDust = false;
     private CircleAnimIndicator circleAnimIndicator;
+    private Button btnReload;
 
     private RadioGroup openSwitchGroup;
     private RadioButton openSwitch;
@@ -97,6 +100,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         viewPager.setCurrentItem(0);
+
+        btnReload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initWeatherData();
+                initDustData();
+                viewPager.setCurrentItem(0);
+            }
+        });
+
 
         openSwitchGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -147,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
         networkService = ApplicationController.getInstance().getNetworkService();
         viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
         circleAnimIndicator = (CircleAnimIndicator)findViewById(R.id.circleAnimIndicator);
+        btnReload = (Button)findViewById(R.id.button_reload);
         openSwitchGroup = (RadioGroup) findViewById(R.id.radiogroup_main_radiogroup);
         openSwitch = (RadioButton) findViewById(R.id.radiobutton_main_open);
         closeSwitch = (RadioButton) findViewById(R.id.radiobutton_main_close);

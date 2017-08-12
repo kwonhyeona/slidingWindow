@@ -15,36 +15,138 @@
             android:layout_height="180dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:src="@drawable/rain2" />
+            android:src="@drawable/rain" />
 
         <LinearLayout
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="강수량 : "
-                android:textSize="@dimen/textBasic"
-                android:textColor="@color/colorWhite"/>
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textBasic" />
 
             <TextView
                 android:id="@+id/textview_rain_rainfall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="11"
+                android:textColor="@color/colorWhite"
                 android:textSize="@dimen/textBasic"
-                android:textColor="@color/colorWhite"/>
+                tools:text="11" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="mm"
-                android:textSize="@dimen/textBasic"
-                android:textColor="@color/colorWhite"/>
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textBasic" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.6dp"
+            android:layout_marginTop="20dp"
+            android:background="@color/colorGray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="일반"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSmall" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="호우주의보"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSmall" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="호우경보"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSmall" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:src="@drawable/rain_low" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:src="@drawable/rain_mid" />
+
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:src="@drawable/rain_high" />
+
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginTop="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="일반적인 강수량"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSmall" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="6시간동안 70m 이상\n12시간동안 110m 이상"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSmall" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="6시간동안 110m 이상\n12시간동안 180㎜ 이상"
+                android:textColor="@color/colorWhite"
+                android:textSize="@dimen/textSmall" />
 
         </LinearLayout>
     </LinearLayout>
+
 </FrameLayout>

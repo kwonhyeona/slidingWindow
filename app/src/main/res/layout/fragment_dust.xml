@@ -79,9 +79,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:textSize="@dimen/textSmall"
                     android:text="좋음"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -89,8 +89,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="보통"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -98,8 +98,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="약간 나쁨"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -107,8 +107,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="나쁨"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -116,8 +116,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="매우 나쁨"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
             </LinearLayout>
 
             <LinearLayout
@@ -168,8 +168,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="0~30"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -177,8 +177,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="31~80"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -186,8 +186,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="81~120"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -195,8 +195,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="121~200"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -204,8 +204,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="201~300"
-                    android:textSize="@dimen/textSmall"
-                    android:textColor="@color/colorWhite" />
+                    android:textColor="@color/colorWhite"
+                    android:textSize="@dimen/textSmall" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
