@@ -6,6 +6,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Switch;
@@ -36,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
     //Back 키 두번 클릭 관련 변수
     private final long FINSH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
-
     ViewPager viewPager;
     PagerAdapter pagerAdapter;
     private NetworkService networkService;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private String api_dust_grade;      // 현재 미세먼지 등급
     private String api_dust_value;      // 현재 미세먼지 값
     private TextView tv_dust, tv_dust_grade, tv_temp, tv_humidity;
-
+    private Switch openSwitch;
     private boolean aWeather = false, aDust = false;
     private CircleAnimIndicator circleAnimIndicator;
 
@@ -103,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
 
         openSwitchGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                openSwitchGroup.getCheckedRadioButtonId();
-                Log.d(TAG,""+openSwitchGroup.getCheckedRadioButtonId());
-
+            public void onCheckedChanged(RadioGroup radioGroup, int b) {
+                //// TODO: 2017. 8. 5. 서버랑 문 여닫아라 통신하기
                 int openValue = 0;
 
                 if(openSwitch.isChecked()){
