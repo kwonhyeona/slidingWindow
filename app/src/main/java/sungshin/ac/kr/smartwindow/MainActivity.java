@@ -1,16 +1,18 @@
 package sungshin.ac.kr.smartwindow;
 
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.CompoundButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.Circle;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 
@@ -45,10 +47,14 @@ public class MainActivity extends AppCompatActivity {
     private DustRepo dustRepo;
     private String api_dust_grade;      // 현재 미세먼지 등급
     private String api_dust_value;      // 현재 미세먼지 값
+    private TextView tv_dust, tv_dust_grade, tv_temp, tv_humidity;
     private Switch openSwitch;
     private boolean aWeather = false, aDust = false;
     private CircleAnimIndicator circleAnimIndicator;
 
+    private RadioGroup openSwitchGroup;
+    private RadioButton openSwitch;
+    private RadioButton closeSwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,13 +101,20 @@ public class MainActivity extends AppCompatActivity {
         });
         viewPager.setCurrentItem(0);
 
-        openSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        openSwitchGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                final boolean isOpen = b;
+            public void onCheckedChanged(RadioGroup radioGroup, int b) {
                 //// TODO: 2017. 8. 5. 서버랑 문 여닫아라 통신하기
                 int openValue = 0;
-                if(!b){ openValue = 1; }
+
+                if(openSwitch.isChecked()){
+                    openValue = 0;
+                }
+                else if(closeSwitch.isChecked()){
+                    openValue = 1;
+                }
+
+                final boolean isOpen = (openValue == 0);
 
                 Call<OpenResult> sendOpenValue = networkService.sendOpenValue(openValue);
                 sendOpenValue.enqueue(new Callback<OpenResult>() {
@@ -135,9 +148,12 @@ public class MainActivity extends AppCompatActivity {
     private void init() {
         // 네트워크 초기화
         networkService = ApplicationController.getInstance().getNetworkService();
-        openSwitch = (Switch) findViewById(R.id.switch_main_open);
         viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
         circleAnimIndicator = (CircleAnimIndicator)findViewById(R.id.circleAnimIndicator);
+        openSwitchGroup = (RadioGroup) findViewById(R.id.radiogroup_main_radiogroup);
+        openSwitch = (RadioButton) findViewById(R.id.radiobutton_main_open);
+        closeSwitch = (RadioButton) findViewById(R.id.radiobutton_main_close);
+        pagerAdapter = new PageAdapter(getSupportFragmentManager());
         FirebaseApp.initializeApp(this);
         Log.d(TAG, "Token : " + FirebaseInstanceId.getInstance().getToken());
     }
