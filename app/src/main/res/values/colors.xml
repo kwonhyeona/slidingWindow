@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#61D6E8</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimaryDark">#5482A6</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="colorSky">#99acd4</color> 
+    <!--<color name="colorSky">#99acd4</color> -->
+    <color name="colorSky">#BAE6FF</color>
     <color name="colorBlue">#61D6E8</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorGray">#6d6d6d</color>
@@ -27,4 +28,6 @@
     <color name="transparent">#00000000</color>
 
     <color name="colorRed">#ff0000</color>
+    <color name="colorNavy">#80000000</color>
+    <!-- 213655  5482A6  A2DFF7  B5DAFF-->
 </resources>

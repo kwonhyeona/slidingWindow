@@ -118,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 int openValue = 0;
 
                 if(openSwitch.isChecked()){
+
                     openValue = 0;
                 }
                 else if(closeSwitch.isChecked()){

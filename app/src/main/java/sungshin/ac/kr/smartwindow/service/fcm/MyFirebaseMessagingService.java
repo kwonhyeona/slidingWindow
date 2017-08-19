@@ -13,6 +13,7 @@ import com.google.firebase.messaging.RemoteMessage;
 import java.util.Map;
 
 import sungshin.ac.kr.smartwindow.MainActivity;
+import sungshin.ac.kr.smartwindow.PopupActivity;
 import sungshin.ac.kr.smartwindow.R;
 
 import static android.R.id.message;
@@ -38,10 +39,15 @@ public class MyFirebaseMessagingService extends com.google.firebase.messaging.Fi
     }
 
     private void sendNotification(String messageTitle, String messageBody) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        Intent intent_ = new Intent(getApplicationContext(), PopupActivity.class);
+        intent_.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent_,
                 PendingIntent.FLAG_ONE_SHOT);
+//        getApplicationContext().startActivity(intent_);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+//                PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         //아이콘이나 제목 수정 -> 알림의 모양을 설정하는 코드

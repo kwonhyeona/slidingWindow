@@ -14,32 +14,43 @@
 
     <Button
         android:id="@+id/button_reload"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:layout_gravity="right"
+        android:layout_marginBottom="5dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/reload" />
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager_main_content"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5">
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@drawable/white_border">
 
-    </android.support.v4.view.ViewPager>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager_main_content"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSky">
+        </android.support.v4.view.ViewPager>
 
-    <sungshin.ac.kr.smartwindow.CircleAnimIndicator
-        android:id="@+id/circleAnimIndicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp" />
+        <sungshin.ac.kr.smartwindow.CircleAnimIndicator
+            android:id="@+id/circleAnimIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:gravity="center">
+
         <RadioGroup
             android:id="@+id/radiogroup_main_radiogroup"
             android:layout_width="match_parent"
