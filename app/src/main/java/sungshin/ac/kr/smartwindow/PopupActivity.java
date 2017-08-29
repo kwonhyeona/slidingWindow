@@ -3,10 +3,13 @@ package sungshin.ac.kr.smartwindow;
 import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 
 public class PopupActivity extends Activity {
+    private Button btn_ok;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,5 +21,13 @@ public class PopupActivity extends Activity {
         getWindow().setAttributes(layoutParams);
 
         setContentView(R.layout.activity_popup);
+        btn_ok = (Button)findViewById(R.id.btn_ok);
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
