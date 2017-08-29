@@ -147,7 +147,7 @@
                     android:gravity="center"
                     android:text="일반적인 강수량"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/textSmall" />
+                    android:textSize="@dimen/textVerySmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -156,7 +156,7 @@
                     android:gravity="center"
                     android:text="6시간동안 70m 이상\n12시간동안 110m 이상"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/textSmall" />
+                    android:textSize="@dimen/textVerySmall" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -165,7 +165,7 @@
                     android:gravity="center"
                     android:text="6시간동안 110m 이상\n12시간동안 180㎜ 이상"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/textSmall" />
+                    android:textSize="@dimen/textVerySmall" />
 
             </LinearLayout>
         </LinearLayout>

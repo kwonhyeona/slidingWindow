@@ -24,7 +24,6 @@ public class DustRepo {
         public String getMessage() {
             return message;
         }
-
         public String getCode() {
             return code;
         }

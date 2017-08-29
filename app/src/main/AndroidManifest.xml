@@ -93,7 +93,7 @@
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent"></activity>
-        <activity android:name=".LoginActivity"></activity>
+
     </application>
 
 </manifest>

@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private RadioGroup openSwitchGroup;
     private RadioButton openSwitch;
     private RadioButton closeSwitch;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,12 +118,11 @@ public class MainActivity extends AppCompatActivity {
                 //// TODO: 2017. 8. 5. 서버랑 문 여닫아라 통신하기
                 int openValue = 0;
 
-                if(openSwitch.isChecked()){
+                if (openSwitch.isChecked()) {
 
-                    openValue = 0;
-                }
-                else if(closeSwitch.isChecked()){
                     openValue = 1;
+                } else if (closeSwitch.isChecked()) {
+                    openValue = 0;
                 }
 
                 final boolean isOpen = (openValue == 0);
@@ -134,12 +134,12 @@ public class MainActivity extends AppCompatActivity {
 
                         if (response.isSuccessful()) {
                             Log.d(TAG, "response.body : " + response.body());
-                            if(response.body().result.equals("ok")) {
+                            if (response.body().result.equals("ok")) {
                                 // TODO: 성공했을 때 작업
-                                if(isOpen) {
-                                    Toast.makeText(getBaseContext(), "문이 열렸습니다.", Toast.LENGTH_SHORT).show();
-                                } else {
+                                if (isOpen) {
                                     Toast.makeText(getBaseContext(), "문이 닫혔습니다.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getBaseContext(), "문이 열렸습니다.", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -160,8 +160,8 @@ public class MainActivity extends AppCompatActivity {
         // 네트워크 초기화
         networkService = ApplicationController.getInstance().getNetworkService();
         viewPager = (ViewPager) findViewById(R.id.viewpager_main_content);
-        circleAnimIndicator = (CircleAnimIndicator)findViewById(R.id.circleAnimIndicator);
-        btnReload = (Button)findViewById(R.id.button_reload);
+        circleAnimIndicator = (CircleAnimIndicator) findViewById(R.id.circleAnimIndicator);
+        btnReload = (Button) findViewById(R.id.button_reload);
         openSwitchGroup = (RadioGroup) findViewById(R.id.radiogroup_main_radiogroup);
         openSwitch = (RadioButton) findViewById(R.id.radiobutton_main_open);
         closeSwitch = (RadioButton) findViewById(R.id.radiobutton_main_close);
@@ -234,9 +234,6 @@ public class MainActivity extends AppCompatActivity {
                         api_dust_grade = Dust.getInstance().getGrade();
                         api_dust_value = Dust.getInstance().getValue();
 
-                        Log.i(TAG, "미세먼지 양 : " + Dust.getInstance().getValue());
-                        Log.i(TAG, "미세먼지 등급 : " + Dust.getInstance().getGrade());
-
                         pushDustEvent();
                     }
                 } else {
@@ -258,13 +255,16 @@ public class MainActivity extends AppCompatActivity {
 
         if (api_dust_grade.equals("약간나쁨")) {
             Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_1).toString());
+        } else if (api_dust_grade.equals("나쁨")) {
+            Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_2).toString());
+        } else if (api_dust_grade.equals("매우나쁨")) {
+            Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_3).toString());
+        } else if (api_dust_grade.equals("보통")) {
+            Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_4).toString());
         }
-        else if (api_dust_grade.equals("나쁨")) {
-            Push.getInstance().sendPush(MainActivity.this, "dust", "dust_bad");
-        }
-        else if (api_dust_grade.equals("매우나쁨")) {
-            Push.getInstance().sendPush(MainActivity.this, "dust", "dust_so_much_bad");
-        }
+//        } else if (api_dust_grade.equals("좋음")) {
+//            Push.getInstance().sendPush(MainActivity.this, getText(R.string.push_dust).toString(), getText(R.string.dust_5).toString());
+//        }
         updatePager();
     }
 

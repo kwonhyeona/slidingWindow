@@ -10,14 +10,12 @@ import java.util.List;
  */
 
 public class WeatherRepo {
-
     @SerializedName("result")
     Result result;
     @SerializedName("weather")
     weather weather;
 
     public error error;
-
 
     public class Result {
         @SerializedName("message")
@@ -90,6 +88,7 @@ public class WeatherRepo {
                 String tmax;
                 @SerializedName("tmin")
                 String tmin;
+
                 public String getTc() {
                     return tc;
                 }

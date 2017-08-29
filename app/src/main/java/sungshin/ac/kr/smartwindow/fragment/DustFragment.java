@@ -24,7 +24,6 @@ public class DustFragment extends android.support.v4.app.Fragment {
         Bundle args = new Bundle();
         args.putString("dust_grade", dust_grade);
         args.putString("dust_value", dust_value);
-        Log.i("mytag", "dustFragment, dust_grade : " + dust_grade);
         fragment.setArguments(args);
         return fragment;
     }

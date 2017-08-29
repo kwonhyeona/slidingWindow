@@ -20,11 +20,7 @@ public interface NetworkService {
     @Headers({"Accept: application/json", "appKey: 05a07ead-ae2c-350a-b4bb-05c54a651176"})
     @GET("weather/current/hourly")
     Call<WeatherRepo> getBasicWeather(@Query("version") int version,
-                                      @Query("city") String city, @Query("county") String county, @Query("village") String village);
-
-//    Call<WeatherRepo> getBasicWeather(@Query("version") int version, @Query("lat") String lat, @Query("lon") String lon,
-//                                      @Query("city") String city, @Query("county") String county, @Query("village") String village,
-//                                      @Query("stnid") int stnid);
+                                      @Query("city") String city, @Query("co unty") String county, @Query("village") String village);
 
     // 미세먼지
     @Headers({"Accept: application/json", "appKey: 05a07ead-ae2c-350a-b4bb-05c54a651176"})
@@ -32,6 +28,6 @@ public interface NetworkService {
     Call<DustRepo> getDust(@Query("version") int version,
                            @Query("lat") String lat, @Query("lon") String lon);
 
-    @GET("beta/openTest/{isClose}")
+    @GET("beta/{isClose}")
     Call<OpenResult> sendOpenValue(@Path("isClose") int isClose);
 }

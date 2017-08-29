@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +34,9 @@ public class RainFragment extends android.support.v4.app.Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            type = getArguments().getString("type");
-            sinceOntime = getArguments().getString("sinceOntime");
+        type = getArguments().getString("type");
+        sinceOntime = getArguments().getString("sinceOntime");
+        Log.i("mytag", "sinceOntime : " + sinceOntime);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class RainFragment extends android.support.v4.app.Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_rain, container, false);
-        tv_onTime = (TextView)v.findViewById(R.id.textview_rain_rainfall);
+        tv_onTime = (TextView) v.findViewById(R.id.textview_rain_rainfall);
         tv_onTime.setText(sinceOntime);
         return v;
     }
